@@ -1,0 +1,17 @@
+name = "my_cicd"
+version = "0.1.0"
+
+[dependencies]
+cicd = "^0.9.1"
+distrib = "^0.9.1"
+fs = "^0.9.1"
+http = "^0.9.1"
+log = "^0.9.1"
+net = "^0.9.1"
+process = "^0.9.1"
+std = "^0.9.1"
+work = "^0.9.1"
+
+[entrypoints]
+advanced = "my_cicd/advanced::main"
+main = "my_cicd::main"
