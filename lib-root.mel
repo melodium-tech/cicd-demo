@@ -25,15 +25,14 @@ use std/engine/util::startup
 treatment main(const api_token: string, const build_location: string = "compose", const test_location: string = "compose", output_directory: string, repository_clone_url: string, repository_clone_ref: string)
   // Model used to handle all logs.
   model logger: Logger()
-  // Models used to dispatch work among Mélodium engines.
-  model cicdBuild: CicdDispatchEngine(api_token=api_token, location=build_location)
-  model cicdTest: CicdDispatchEngine(api_token=api_token, location=test_location)
+  // Model used to dispatch work among Mélodium engines.
+  model cicd: CicdDispatchEngine(api_token=api_token, location=build_location)
 {
     startup()
 
     manageLogs[logger=logger](output_directory=output_directory)
 
-    buildOnGithub: simpleStep[dispatcher=cicdBuild, logger=logger](
+    buildOnGithub: simpleStep[dispatcher=cicd, logger=logger](
       name="build",
       image="ubuntu:noble",
       commands=|raw_commands([
@@ -52,7 +51,7 @@ treatment main(const api_token: string, const build_location: string = "compose"
       out_file="files-list.txt"
     )
     
-    testOnInfra: simpleStepWithInput[dispatcher=cicdTest, logger=logger](
+    testOnInfra: simpleStepWithInput[dispatcher=cicd, logger=logger](
       name="test",
       image="alpine",
       in_file="list.txt",
