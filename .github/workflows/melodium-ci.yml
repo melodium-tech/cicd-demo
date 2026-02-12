@@ -7,7 +7,7 @@ jobs:
   melodium:
     uses: melodium-tech/github-actions/.github/workflows/melodium-local-distrib.yml@master
     with:
-      melodium_images_pull_source: registry.gitlab.com/melodium/containers/melodium
+      melodium_images_pull_source: registry.gitlab.com/melodium/containers
       version: 0.10.0
       command: |
         run Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url '${{ toJSON(github.repositoryUrl) }}' --repository_clone_ref '${{ toJSON(github.ref_name) }}' --output_directory '"output"' 
