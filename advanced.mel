@@ -86,7 +86,7 @@ treatment build[cicd: CicdDispatchEngine](repository_clone_url: string, reposito
         commands=|raw_commands([
             "sh -c \"ls -l --almost-all | tee files-list.txt\"",
             "mv files-list.txt /mounted/result/",
-            "ls -l files-list.txt"
+            "ls -l /mounted/result/files-list.txt"
         ]),
         out_filesystem="build-result",
         out_file="files-list.txt"
@@ -124,7 +124,7 @@ treatment test[cicd: CicdDispatchEngine]()
         in_file="list.txt",
         commands=[
             |command("test", ["-s", "/mounted/data/list.txt"]),
-            |command("ls", ["-l", "files-list.txt"]),
+            |command("ls", ["-l", "/mounted/data/list.txt"]),
             |command("cat", ["/mounted/data/list.txt"])
         ]
     )
