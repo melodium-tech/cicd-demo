@@ -11,7 +11,6 @@ use cicd/runners::setupRunner
 use cicd/runners::stopRunner
 use cicd/steps::stepOn
 use cicd/steps::stepOnWithInput
-use log/logger::Logger
 use process/command::|command
 use process/command::|raw_commands
 use process/environment::Environment
