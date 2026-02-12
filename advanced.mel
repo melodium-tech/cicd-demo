@@ -125,7 +125,8 @@ treatment test[cicd: CicdDispatchEngine]()
         commands=[
             |command("test", ["-s", "/mounted/data/list.txt"]),
             |command("ls", ["-l", "/mounted/data/list.txt"]),
-            |command("cat", ["/mounted/data/list.txt"])
+            |command("cat", ["/mounted/data/list.txt"]),
+            |command("sleep", ["10"])
         ]
     )
     stopRunner[runner=runner]()
