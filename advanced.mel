@@ -9,7 +9,6 @@ use cicd/runners::CicdDispatchEngine
 use cicd/runners::CicdRunnerEngine
 use cicd/runners::setupRunner
 use cicd/runners::stopRunner
-use cicd/logging::manageLogs
 use cicd/steps::stepOn
 use cicd/steps::stepOnWithInput
 use log/logger::Logger
@@ -38,35 +37,30 @@ use work/resources::|mount
   All the other parameters are present to handle integration with CI services.
 */
 treatment main(const api_token: string, const build_location: string = "compose", const test_location: string = "compose", output_directory: string, repository_clone_url: string, repository_clone_ref: string)
-  // Model used to handle all logs.
-  model logger: Logger()
   // Model used to dispatch work among Mélodium engines.
   model cicdBuild: CicdDispatchEngine(api_token=api_token, location=build_location)
   model cicdTest: CicdDispatchEngine(api_token=api_token, location=test_location)
 {
     startup()
 
-    manageLogs[logger=logger](output_directory=output_directory)
-
-    buildOnGithub: build[cicd=cicdBuild, logger=logger](repository_clone_url=repository_clone_url, repository_clone_ref=repository_clone_ref)
-    testOnInfra: test[cicd=cicdTest, logger=logger]()
+    buildOnGithub: build[cicd=cicdBuild](repository_clone_url=repository_clone_url, repository_clone_ref=repository_clone_ref)
+    testOnInfra: test[cicd=cicdTest]()
 
     startup.trigger -> buildOnGithub.trigger,data -> testOnInfra.data
-    startup.trigger -------------------------------> testOnInfra.trigger,finished -> manageLogs.stop
+    startup.trigger -------------------------------> testOnInfra.trigger
 }
 
 /**
   Build step, cloning and listing the repository root content.
 */
-treatment build[cicd: CicdDispatchEngine, logger: Logger](repository_clone_url: string, repository_clone_ref: string)
+treatment build[cicd: CicdDispatchEngine](repository_clone_url: string, repository_clone_ref: string)
   model runner: CicdRunnerEngine()
   input trigger: Block<void>
   output data:   Stream<byte>
 {
     setupRunner[
         dispatcher=cicd,
-        runner=runner,
-        logger=logger
+        runner=runner
     ](
         name="build",
         cpu=10,
@@ -75,7 +69,7 @@ treatment build[cicd: CicdDispatchEngine, logger: Logger](repository_clone_url: 
         volumes=[|volume("build-result", 30)],
         containers=[|container("ubuntu", 1000, 10, 8000, |amd64(), [|mount("build-result", "/mounted/result")], "ubuntu:noble", _)]
     )
-    gitClone: stepOn[runner=runner, logger=logger](
+    gitClone: stepOn[runner=runner](
         name="git",
         executor_name="ubuntu",
         environment=|wrap<Environment>(|environment(|map([]), "/root", false, false)),
@@ -86,7 +80,7 @@ treatment build[cicd: CicdDispatchEngine, logger: Logger](repository_clone_url: 
             |command("git", ["clone", "--branch", repository_clone_ref, "--depth", "1", repository_clone_url, "project"])
         ]
     )
-    makeList: stepOn[runner=runner, logger=logger](
+    makeList: stepOn[runner=runner](
         name="list",
         executor_name="ubuntu",
         environment=|wrap<Environment>(|environment(|map([]), "/root/project", false, false)),
@@ -106,7 +100,7 @@ treatment build[cicd: CicdDispatchEngine, logger: Logger](repository_clone_url: 
 /**
   Test step, insuring listing is not empty.
 */
-treatment test[cicd: CicdDispatchEngine, logger: Logger]()
+treatment test[cicd: CicdDispatchEngine]()
   model runner: CicdRunnerEngine()
   input trigger: Block<void>
   input data: Stream<byte>
@@ -114,8 +108,7 @@ treatment test[cicd: CicdDispatchEngine, logger: Logger]()
 {
     setupRunner[
         dispatcher=cicd,
-        runner=runner,
-        logger=logger
+        runner=runner
     ](
         name="test",
         cpu=10,
@@ -124,7 +117,7 @@ treatment test[cicd: CicdDispatchEngine, logger: Logger]()
         volumes=[|volume("tested-data", 30)],
         containers=[|container("alpine", 500, 10, 1000, |amd64(), [|mount("tested-data", "/mounted/data")], "alpine:3", _)]
     )
-    makeTest: stepOnWithInput[runner=runner, logger=logger](
+    makeTest: stepOnWithInput[runner=runner](
         name="test",
         executor_name="alpine",
         in_filesystem="tested-data",
