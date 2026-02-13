@@ -15,11 +15,15 @@
 
 melodium-ci-debug:
   image:
-    name: registry.gitlab.com/melodium/containers/melodium:0.10.0-alpine
+    name: registry.gitlab.com/melodium/containers/melodium:0.10.0-alpine-docker
     entrypoint: [""]
   stage: build
   variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
     MELODIUM_IMAGES_PULL_SOURCE: registry.gitlab.com/melodium/containers
+  services:
+    - docker:28.0.4-dind
   script:
     - apk add coreutils
     - mkdir output
