@@ -9,5 +9,6 @@ include:
 
 melodium-ci:
   artifacts:
+    when: always
     paths:
       - output
