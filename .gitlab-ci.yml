@@ -27,7 +27,7 @@ melodium-ci-debug:
   script:
     - apk add coreutils
     - mkdir output
-    - /usr/bin/timeout 4m melodium run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' | tee output/full.log
+    - /usr/bin/timeout 4m melodium run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' 2>&1 | tee output/full.log
   artifacts:
     when: always
     paths:
