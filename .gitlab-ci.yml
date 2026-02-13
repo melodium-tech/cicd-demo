@@ -5,7 +5,7 @@ include:
       melodium_images_pull_source: registry.gitlab.com/melodium/containers
       version: 0.10.0
       job_name: melodium-ci
-      command: run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"'
+      command: run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' | tee output/full.log
 
 melodium-ci:
   artifacts:
