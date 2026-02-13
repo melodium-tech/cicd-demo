@@ -1,13 +1,27 @@
 
-include:
-  - component: gitlab.com/melodium/gitlab-ci/melodium-local-distrib@v0.9.2
-    inputs:
-      melodium_images_pull_source: registry.gitlab.com/melodium/containers
-      version: 0.10.0
-      job_name: melodium-ci
-      command: run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' | tee output/full.log
+# include:
+#   - component: gitlab.com/melodium/gitlab-ci/melodium-local-distrib@v0.9.2
+#     inputs:
+#       melodium_images_pull_source: registry.gitlab.com/melodium/containers
+#       version: 0.10.0
+#       job_name: melodium-ci
+#       command: run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' | tee output/full.log
 
-melodium-ci:
+# melodium-ci:
+#   artifacts:
+#     when: always
+#     paths:
+#       - output
+
+melodium-ci-debug:
+  image:
+    name: registry.gitlab.com/melodium/containers/melodium:0.10.0-alpine
+    entrypoint: [""]
+  stage: build
+  variables:
+    MELODIUM_IMAGES_PULL_SOURCE: registry.gitlab.com/melodium/containers
+  script:
+    - timemout 4m melodium run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' | tee output/full.log
   artifacts:
     when: always
     paths:
