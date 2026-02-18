@@ -10,7 +10,7 @@ jobs:
       melodium_images_pull_source: registry.gitlab.com/melodium/containers
       version: 0.10.0
       command: |
-        run Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url '${{ toJSON(github.repositoryUrl) }}' --repository_clone_ref '${{ toJSON(github.ref_name) }}' --output_directory '"output"' 
+        run --log output/full.log --debug output/full.debug Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url '${{ toJSON(github.repositoryUrl) }}' --repository_clone_ref '${{ toJSON(github.ref_name) }}' --output_directory '"output"' 
       artifact-path: 'output/'
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -29,13 +29,12 @@ use work/resources::|mount
   - `api_token`: service key provided to access Mélodium work distribution API;
   - `build_location`: location where dispatched job-workers take place (can be set to `"compose"` or `"api"`);
   - `test_location`: location where dispatched job-workers take place (can be set to `"compose"` or `"api"`);
-  - `output_directory`: directory where output files (including logs) are wrote;
   - `repository_clone_url`: URL to process Git clone;
   - `repository_clone_ref`: Git reference (sha or tag) to clone.
 
   All the other parameters are present to handle integration with CI services.
 */
-treatment main(const api_token: string, const build_location: string = "compose", const test_location: string = "compose", output_directory: string, repository_clone_url: string, repository_clone_ref: string)
+treatment main(const api_token: string, const build_location: string = "compose", const test_location: string = "compose", repository_clone_url: string, repository_clone_ref: string)
   // Model used to dispatch work among Mélodium engines.
   model cicdBuild: CicdDispatchEngine(api_token=api_token, location=build_location)
   model cicdTest: CicdDispatchEngine(api_token=api_token, location=test_location)
