@@ -20,7 +20,7 @@ It is required to fill a variable `GITLAB_PAT` with personnal access token in or
 
 ## Cadence.CI
 
-`CADENCE_API_TOKEN` is for Cadence.CI information reporting and API exchange in case of remote execution: https://cadence.ci/en/dashboard/tokens
+`MELODIUM_API_TOKEN` is for Cadence.CI information reporting and API exchange in case of remote execution: https://cadence.ci/en/dashboard/tokens
 
-`--build_location` and `--test_location` can either be `"compose"` (which makes use of local container Docker/Podman Compose command), or `"api"` (which pass through Cadence.CI API to connect to execution cluster): https://doc.melodium.tech/latest/en/cicd/runners/CicdDispatchEngine.html  
-In both cases, the api will get reports of the execution if the `CADENCE_API_TOKEN` is valid.
+`--build_location` and `--test_location` can either be `compose` (which makes use of local container Docker/Podman Compose command), or `api` (which pass through Cadence.CI API to connect to execution cluster): https://doc.melodium.tech/latest/en/cicd/runners/CicdDispatchEngine.html  
+In both cases, the api will get reports of the execution if the `MELODIUM_API_TOKEN` is valid.

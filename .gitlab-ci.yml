@@ -1,33 +1,12 @@
 
-# include:
-#   - component: gitlab.com/melodium/gitlab-ci/melodium-local-distrib@v0.9.2
-#     inputs:
-#       melodium_images_pull_source: registry.gitlab.com/melodium/containers
-#       version: 0.10.0
-#       job_name: melodium-ci
-#       command: run ./Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" --output_directory '"output"' | tee output/full.log
+include:
+  - component: gitlab.com/melodium/gitlab-ci/melodium-local-distrib@v0.10.0
+    inputs:
+      melodium_images_pull_source: registry.gitlab.com/melodium/containers
+      job_name: melodium-ci
+      command: run --api-report ./Compo.toml advanced --repository_clone_url "$CI_REPOSITORY_URL" --repository_clone_ref "$CI_COMMIT_REF_NAME"
 
-# melodium-ci:
-#   artifacts:
-#     when: always
-#     paths:
-#       - output
-
-melodium-ci-debug:
-  image:
-    name: registry.gitlab.com/melodium/containers/melodium:0.10.0-alpine-docker
-    entrypoint: [""]
-  stage: build
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-    MELODIUM_IMAGES_PULL_SOURCE: registry.gitlab.com/melodium/containers
-  services:
-    - docker:28.0.4-dind
-  script:
-    - apk add coreutils
-    - mkdir output
-    - /usr/bin/timeout 4m melodium run --api-report --logs output/full.log --debug output/full.debug  ./Compo.toml advanced --repository_clone_url "\"$CI_REPOSITORY_URL\"" --repository_clone_ref "\"$CI_COMMIT_REF_NAME\"" 2>&1 | tee output/full.log
+melodium-ci:
   artifacts:
     when: always
     paths:

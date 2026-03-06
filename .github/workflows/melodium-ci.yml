@@ -5,12 +5,11 @@ on:
 
 jobs:
   melodium:
-    uses: melodium-tech/github-actions/.github/workflows/melodium-local-distrib.yml@master
+    uses: melodium-tech/github-actions/.github/workflows/melodium-local-distrib.yml@v0.10.0
     with:
       melodium_images_pull_source: registry.gitlab.com/melodium/containers
-      version: 0.10.0
       command: |
-        run --logs output/full.log --debug output/full.debug Compo.toml advanced --api_token "\"$CADENCE_API_TOKEN\"" --repository_clone_url '${{ toJSON(github.repositoryUrl) }}' --repository_clone_ref '${{ toJSON(github.ref_name) }}'
+        run --api-report Compo.toml advanced --repository_clone_url '${{ github.repositoryUrl }}' --repository_clone_ref '${{ github.ref_name }}'
       artifact-path: 'output/'
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
