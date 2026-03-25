@@ -3,7 +3,7 @@ include:
   - component: gitlab.com/melodium/gitlab-ci/melodium-local-distrib@v0.10.0
     inputs:
       job_name: melodium-ci
-      command: run --api-report --logs output/logs.log ./Compo.toml --repository_clone_url "$CI_REPOSITORY_URL" --repository_clone_ref "$CI_COMMIT_REF_NAME"
+      command: run --api-report --logs output/logs.log ./Compo.toml advanced --repository_clone_url "$CI_REPOSITORY_URL" --repository_clone_ref "$CI_COMMIT_REF_NAME"
 
 melodium-ci:
   artifacts:
