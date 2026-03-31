@@ -2,6 +2,7 @@ name: melodium-ci
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   melodium:
