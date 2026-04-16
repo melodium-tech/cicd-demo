@@ -8,6 +8,7 @@ jobs:
     uses: melodium-tech/github-actions/.github/workflows/melodium-local-distrib.yml@v0.10.0
     with:
       melodium_images_pull_source: registry.gitlab.com/melodium/containers
+      version: 0.10.1
       command: |
         run --api-report Compo.toml advanced --repository_clone_url '${{ github.repositoryUrl }}' --repository_clone_ref '${{ github.ref_name }}'
       artifact-path: 'output/'
