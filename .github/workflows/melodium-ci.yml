@@ -2,6 +2,7 @@ name: melodium-ci
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   melodium:
@@ -10,7 +11,8 @@ jobs:
       melodium_images_pull_source: registry.gitlab.com/melodium/containers
       version: 0.10.1
       command: |
-        run --api-report Compo.toml advanced --repository_clone_url '${{ github.repositoryUrl }}' --repository_clone_ref '${{ github.ref_name }}'
+        run --api-report --logs output/logs.log Compo.toml advanced --repository_clone_url '${{ github.repositoryUrl }}' --repository_clone_ref '${{ github.ref_name }}'
       artifact-path: 'output/'
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+      melodium-api-token: ${{ secrets.MELODIUM_API_TOKEN }}

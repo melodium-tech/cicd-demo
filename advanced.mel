@@ -34,7 +34,7 @@ use work/resources::|mount
 
   All the other parameters are present to handle integration with CI services.
 */
-treatment main(const api_token: Option<string>, const build_location: string = "compose", const test_location: string = "compose", repository_clone_url: string, repository_clone_ref: string)
+treatment main(const api_token: Option<string> = _, const build_location: string = "compose", const test_location: string = "compose", repository_clone_url: string, repository_clone_ref: string)
   // Model used to dispatch work among Mélodium engines.
   model cicdBuild: CicdDispatchEngine(api_token=api_token, location=build_location)
   model cicdTest: CicdDispatchEngine(api_token=api_token, location=test_location)
